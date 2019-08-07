@@ -8,4 +8,8 @@ Vagrant.configure("2") do |config|
     config.vm.network "private_network", ip: "192.168.33.100"
     config.vm.synced_folder "data", "/vagrant"
   end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provisioning/playbook-lamp.yml"
+  end
 end

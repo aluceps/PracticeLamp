@@ -1,0 +1,28 @@
+- hosts: playground
+  sudo: yes
+  tasks:
+    - name: system update
+      yum: name=* state=latest
+
+    - name: install repo
+      yum: name={{item}}
+      with_items:
+        - epel-release
+        - remi-release
+
+    - name: replace repos.d/*.repo
+      replace: dest=/etc/yum.repos.d/{{item}} regexp="enabled *= *1" replace="enabled=0"
+      with_items:
+        - epel.repo
+        - remi.repo
+        - remi-php70.repo
+
+    - name: install middle ware
+      yum: name={{item}} state=present enablerepo=epel,remi,remi-php70
+      with_items:
+        - httpd-devel
+        - php70-php-devel
+        - php70-php-gd
+        - php70-php-pdo
+        - php70-php-mbstring
+        - mariadb-server
