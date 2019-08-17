@@ -50,6 +50,19 @@
           - mariadb-server
         enablerepo: "epel,remi-php70"
 
+    - name: install tools for cakephp
+      yum:
+        name:
+          - curl
+          - unzip
+
+    - name: install packages for cakephp
+      yum:
+        name:
+          - php-intl
+          - php-xml
+        enablerepo: "remi-php70"
+
     - name: start httpd
       service:
         name: httpd
