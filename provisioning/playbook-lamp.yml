@@ -42,3 +42,15 @@
           - php-pdo
           - mariadb-server
         enablerepo: "epel,remi-php70"
+
+    - name: start httpd
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: start mariadb
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
