@@ -1,28 +1,44 @@
 - hosts: playground
-  sudo: yes
+  become: yes
   tasks:
     - name: system update
-      yum: name=* state=latest
+      yum:
+        name: '*'
+        state: latest
 
-    - name: install repo
-      yum: name={{item}}
-      with_items:
-        - epel-release
-        - https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    - name: install repos
+      yum:
+        name:
+          - epel-release
+          - https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+        state: present
 
-    - name: replace repos.d/*.repo
-      replace: dest=/etc/yum.repos.d/{{item}} regexp="enabled *= *1" replace="enabled=0"
-      with_items:
+    - name: disable repos
+      replace:
+        path: /etc/yum.repos.d/{{item}}
+        regexp: 'enabled *= *1'
+        replace: 'enabled=0'
+      loop:
         - epel.repo
         - remi.repo
         - remi-php70.repo
 
-    - name: install middle ware
-      yum: name={{item}} state=present enablerepo=epel,remi,remi-php70
-      with_items:
-        - httpd-devel
-        - php70-php-devel
-        - php70-php-gd
-        - php70-php-pdo
-        - php70-php-mbstring
-        - mariadb-server
+    # - name: remove packages
+    #   yum:
+    #     name:
+    #       - httpd
+    #       - php
+    #       - mariadb
+    #     state: absent
+
+    - name: install packages
+      yum:
+        name:
+          - httpd-devel
+          - php
+          - php-devel
+          - php-mbstring
+          - php-mysqlnd
+          - php-pdo
+          - mariadb-server
+        enablerepo: "epel,remi-php70"
