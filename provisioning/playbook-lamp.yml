@@ -6,6 +6,17 @@
         name: '*'
         state: latest
 
+    - name: disable selinux
+      selinux:
+        state: disabled
+
+    - name: install tools
+      yum:
+        name:
+          - wget
+          - vim
+          - git
+
     - name: install repos
       yum:
         name:
@@ -30,13 +41,6 @@
     #       - php
     #       - mariadb
     #     state: absent
-
-    - name: install tools
-      yum:
-        name:
-          - wget
-          - vim
-          - git
 
     - name: install packages
       yum:
