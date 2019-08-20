@@ -67,6 +67,12 @@
           - php-xml
         enablerepo: "remi-php70"
 
+    - name: my favorites tools
+      yum:
+        name:
+          - tig
+        enablerepo: "epel"
+
     - name: start httpd
       service:
         name: httpd
